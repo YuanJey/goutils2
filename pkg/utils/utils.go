@@ -10,6 +10,7 @@ import (
 	"github.com/jinzhu/copier"
 	"github.com/pkg/errors"
 	"math/rand"
+	"reflect"
 	"runtime"
 	"strconv"
 	"strings"
@@ -205,4 +206,17 @@ func MD5TOPassword(text string) string {
 	//h.Write(data)
 	//s = hex.EncodeToString(h.Sum(nil))
 	//fmt.Println(s)
+}
+
+// 更新结构体
+func UpdateStruct(last, low *interface{}) {
+	for i := 0; i < reflect.TypeOf(*last).NumField(); i++ {
+		// Check if the field is empty
+		if reflect.ValueOf(*last).Field(i).IsZero() {
+			// Get the corresponding field in struct B
+			fieldB := reflect.ValueOf(*low).Field(i)
+			// Set the value of the empty field in struct A to the value of the corresponding field in struct B
+			reflect.ValueOf(last).Elem().Field(i).Set(fieldB)
+		}
+	}
 }
